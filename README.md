@@ -236,7 +236,7 @@ This is how the trigger is fired from a REST client like Postman:
 
 <pre>
 POST https://www.exacttargetapis.com/interaction-experimental/v1/events
-Authorization: Bearer <token>
+Authorization: Bearer &lt;token&gt;
 Content-Type: application/json
 
 JSON Payload:
