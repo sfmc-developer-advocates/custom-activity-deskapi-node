@@ -1,0 +1,58 @@
+{
+  "name": "fuel",
+  "description": "Client for ExactTarget's Fuel REST APIs",
+  "homepage": "https://github.com/ExactTarget/node-fuel",
+  "version": "0.4.1",
+  "license": "MIT",
+  "keywords": [
+    "exacttarget fuel"
+  ],
+  "main": "lib/fuel",
+  "dependencies": {
+    "extend": "1.2.1",
+    "request": "~2.27.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-watch": "~0.5.3"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ExactTarget/node-fuel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ExactTarget/node-fuel/issues"
+  },
+  "jshintConfig": {
+    "bitwise": true,
+    "camelcase": true,
+    "eqeqeq": true,
+    "forin": true,
+    "immed": true,
+    "newcap": true,
+    "noarg": true,
+    "node": true,
+    "nonew": true,
+    "plusplus": true,
+    "smarttabs": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true
+  },
+  "readme": "# fuel\r\n\r\nClient for ExactTarget's Fuel REST APIs\r\n\r\n[![Build Status](https://travis-ci.org/ExactTarget/node-fuel.png?branch=master)](https://travis-ci.org/ExactTarget/node-fuel)\r\n\r\n## Getting Started\r\nInstall the module with: `npm install fuel`\r\n\r\n### Call a Fuel REST API\r\n\r\n```javascript\r\n// Load and configure the module\r\n\r\nvar fuel = require('fuel').configure({\r\n\tauthUrl: 'https://auth.exacttargetapis.com/v1/requestToken',\r\n\tclientId: 'xxxxxxxxxxxxxxxxxxxxxxxx',\r\n\tclientSecret: 'yyyyyyyyyyyyyyyyyyyyyyyy'\r\n});\r\n\r\n// OR, if you have a refresh token\r\n\r\nvar fuel = require('fuel').configure({\r\n\tauthUrl: 'https://auth.exacttargetapis.com/v1/requestToken',\r\n\tclientId: 'xxxxxxxxxxxxxxxxxxxxxxxx',\r\n\tclientSecret: 'yyyyyyyyyyyyyyyyyyyyyyyy',\r\n\trefreshToken: 'zzzzzzzzzzzzzzzzzzzzzzzz',\r\n\taccessType: 'offline'\r\n});\r\n\r\n// The fuel module will manage your access token behind the\r\n// scenes, renewing it when necessary, maintaining state\r\n// using the refresh token if present\r\n\r\n// Call the API (this example displays your user context)\r\n\r\nfuel({\r\n\turl: 'https://www.exacttargetapis.com/platform/v1/tokenContext'\r\n}, function (error, request, body) {\r\n\tconsole.log(body);\r\n});\r\n```\r\n#### Syntax\r\n\r\nThe general format is as follows:\r\n\r\n`fuel(options, callback);`\r\n\r\nThe `options` and `callback` parameters are compatible with the `request` module.  For details, see the documentation:\r\n\r\nhttps://github.com/mikeal/request#requestoptions-callback\r\n\r\n### Just manage a Fuel OAuth token\r\n\r\n```javascript\r\n// Load and configure the module\r\n\r\nvar token = require('fuel').token.configure({\r\n\tauthUrl: 'https://auth.exacttargetapis.com/v1/requestToken',\r\n\tclientId: 'xxxxxxxxxxxxxxxxxxxxxxxx',\r\n\tclientSecret: 'yyyyyyyyyyyyyyyyyyyyyyyy'\r\n});\r\n\r\n// OR, if you have a refresh token\r\n\r\nvar token = require('fuel').token.configure({\r\n\tauthUrl: 'https://auth.exacttargetapis.com/v1/requestToken',\r\n\tclientId: 'xxxxxxxxxxxxxxxxxxxxxxxx',\r\n\tclientSecret: 'yyyyyyyyyyyyyyyyyyyyyyyy',\r\n\trefreshToken: 'zzzzzzzzzzzzzzzzzzzzzzzz',\r\n\taccessType: 'offline'\r\n});\r\n\r\n// Get a token (this example displays the token data)\r\n\r\ntoken(function (error, response, tokenData) {\r\n\tconsole.log(tokenData);\r\n});\r\n\r\n// Repeated calls to the token function will return a cached\r\n// token. This module will manage your access token behind the\r\n// scenes, renewing it when necessary, maintaining state\r\n// using the refresh token if present\r\n```\r\n\r\n#### Syntax\r\n\r\nThe general format is as follows:\r\n\r\n`token(callback);`\r\n\r\nThe `callback` parameter is compatible with the `request` module.  For details, see the documentation:\r\n\r\nhttps://github.com/mikeal/request#requestoptions-callback\r\n\r\n## Contributing\r\nBefore writing code, we suggest you [search for issues](https://github.com/ExactTarget/node-mashery/issues?state=open)\r\nor [create a new one](https://github.com/ExactTarget/node-mashery/issues/new) to confirm where your contribution fits into\r\nour roadmap.\r\n\r\nIn lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality.\r\nLint and test your code using [grunt](https://github.com/cowboy/grunt).\r\n\r\n## Acknowledgements\r\n\r\nWe are grateful to the following maintainers, contributors, and sponsors of the technologies used by this module.\r\n\r\n* [Node.js](http://nodejs.org)\r\n\r\n* [Request](https://github.com/mikeal/request) (De facto HTTP request module for Node)\r\n\r\n* [grunt](https://github.com/cowboy/grunt) (Build tool for JavaScript projects)\r\n\r\n##Authors\r\n\r\n**Adam Alexander**\r\n\r\n+ http://twitter.com/adamalex\r\n+ http://github.com/adamalex\r\n\r\n**Benjamin Dean**\r\n\r\n+ https://twitter.com/bdeanet\r\n+ https://github.com/creatovisguru\r\n\r\n**Douglas Wilson**\r\n\r\n+ https://twitter.com/blipsofadoug\r\n+ https://github.com/dougwilson\r\n\r\n## Copyright and license\r\n\r\nCopyright (c) 2013 ExactTarget\r\n\r\nLicensed under the MIT License (the \"License\");\r\nyou may not use this work except in compliance with the License.\r\nYou may obtain a copy of the License in the COPYING file.\r\n\r\nUnless required by applicable law or agreed to in writing, software\r\ndistributed under the License is distributed on an \"AS IS\" BASIS,\r\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\nSee the License for the specific language governing permissions and\r\nlimitations under the License.\r\n",
+  "readmeFilename": "README.md",
+  "_id": "fuel@0.4.1",
+  "dist": {
+    "shasum": "5e499f76ab3b50ddddad91f933547c5e533ae579"
+  },
+  "_from": "fuel@~0.4.1",
+  "_resolved": "https://registry.npmjs.org/fuel/-/fuel-0.4.1.tgz"
+}
