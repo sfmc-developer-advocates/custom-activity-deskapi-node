@@ -119,7 +119,7 @@ When your interaction trigger is fired, the payload you send will be for either 
 #### Creating our base app in App Center
 
 1. clone this repository locally
-    git clone git@github.com:ExactTarget/DeskActivities.git
+    git clone git@github.com:sfmc-developer-advocates/custom-activity-deskapi-node
 
 2. Login to [App Center](https://code.exacttarget.com/appcenter). 'Create Account' as a developer if you haven't already.
 
