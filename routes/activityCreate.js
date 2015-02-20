@@ -1,11 +1,6 @@
 'use strict';
 var https = require( 'https' );
-var activityUtils    = require('./activityUtils');
-
-var host = '__subdomain__.desk.com';
-var username = '__username__';
-var userpw = '__password__';
-var token = new Buffer(username + ':' + userpw).toString('base64');
+var activityUtils = require('./activityUtils');
 
 
 /*
@@ -99,7 +94,7 @@ function initCase(req,res) {
 		} else if (msg == 'createCase') {
 			console.log('controller createCase', data);
 			if (data.id) {
-				res.send( 200, 'Execute' );
+				res.send( 200, {"caseID": data.id} ); //return the new CaseID
 			} else {
 				res.send( 500, {message: 'Error creating Desk.com case.'} );
 			}					
@@ -122,16 +117,16 @@ function findCustIdByEmail(email, next) {
 	console.log('findCustIdByEmail', email);
 	var post_data = '';				
 	var options = {
-		'hostname': host
+		'hostname': activityUtils.deskCreds.host
 		,'path': '/api/v2/customers/search?email=' + email 
 		,'method': 'GET'
 		,'headers': {
 			'Accept': 'application/json' 
 			,'Content-Type': 'application/json'
 			,'Content-Length': post_data.length
-			,'Authorization': 'Basic ' + token
+			,'Authorization': 'Basic ' + activityUtils.deskCreds.token
 		},
-	};				
+	};
 	
 	var httpsCall = https.request(options, function(response) {
 		var data = ''
@@ -180,14 +175,14 @@ function createCustomer(data, next) {
 	});			
 		
 	var options = {
-		'hostname': host
+		'hostname': activityUtils.deskCreds.host
 		,'path': '/api/v2/customers'
 		,'method': 'POST'
 		,'headers': {
 			'Accept': 'application/json' 
 			,'Content-Type': 'application/json'
 			,'Content-Length': post_data.length
-			,'Authorization': 'Basic ' + token
+			,'Authorization': 'Basic ' + activityUtils.deskCreds.token
 		},
 	};				
 	
@@ -233,23 +228,23 @@ function createCase(custId, email, priority, next) {
 		"status":"open",
 		"labels": ["JB"],
 		"message":{  
-			"direction":"in",
-			"to":"support@sfmc-jb-activity.desk-mail.com",
+			"direction": "in",
+			"to": activityUtils.deskCreds.supportEmail,
 			"from": email,
 			"body": "This is a new case created for a customer coming from Journey Builder.",
-			"subject":"My email subject"
+			"subject": "My email subject"
 		}
 	});			
 		
 	var options = {
-		'hostname': host
+		'hostname': activityUtils.deskCreds.host
 		,'path': '/api/v2/customers/' + custId + '/cases'
 		,'method': 'POST'
 		,'headers': {
 			'Accept': 'application/json' 
 			,'Content-Type': 'application/json'
 			,'Content-Length': post_data.length
-			,'Authorization': 'Basic ' + token
+			,'Authorization': 'Basic ' + activityUtils.deskCreds.token
 		},
 	};				
 	
@@ -264,7 +259,7 @@ function createCase(custId, email, priority, next) {
 		response.on( 'end' , function() {
 			if (response.statusCode == 201) {
 				data = JSON.parse(data);
-				console.log('onEND createCustomer',response.statusCode,data.id);			
+				console.log('onEND createCase',response.statusCode,data.id);			
 				next(response.statusCode, 'createCase', {id: data.id});
 			} else {
 				next( response.statusCode, 'createCase', {} );

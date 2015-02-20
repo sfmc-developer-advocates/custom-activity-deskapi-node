@@ -7,7 +7,8 @@ var JWT         = require('./lib/jwtDecoder');
 var path        = require('path');
 var request     = require('request');
 var routes      = require('./routes');
-var activityCreate    = require('./routes/activityCreate');
+var activityCreate   = require('./routes/activityCreate');
+var activityUpdate   = require('./routes/activityUpdate');
 var activityUtils    = require('./routes/activityUtils');
 var pkgjson = require( './package.json' );
 
@@ -15,6 +16,7 @@ var app = express();
 
 // Register configs for the environments where the app functions
 // , these can be stored in a separate file using a module like config
+
 
 var APIKeys = {
     appId           : '__insert_your_app_id__',
@@ -76,6 +78,10 @@ app.post('/ixn/activities/create-case/validate/', activityCreate.validate );
 app.post('/ixn/activities/create-case/publish/', activityCreate.publish );
 app.post('/ixn/activities/create-case/execute/', activityCreate.execute );
 
+app.post('/ixn/activities/update-case/save/', activityUpdate.save );
+app.post('/ixn/activities/update-case/validate/', activityUpdate.validate );
+app.post('/ixn/activities/update-case/publish/', activityUpdate.publish );
+app.post('/ixn/activities/update-case/execute/', activityUpdate.execute );
 
 app.get('/clearList', function( req, res ) {
 	// The client makes this request to get the data

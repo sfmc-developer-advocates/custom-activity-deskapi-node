@@ -43,4 +43,16 @@ exports.logData = function ( req ) {
 	*/
 };
 
+
+exports._deskCreds = {
+	subdomain: '__subdomain__'
+	,username: '__username__'
+	,userpw: '__password__'
+};
+
+exports.deskCreds.host = exports.deskCreds.subdomain + '.desk.com'; 
+exports.deskCreds.supportEmail = 'support@' + exports.deskCreds.subdomain + '.desk-mail.com';
+exports.deskCreds.token = new Buffer(exports.deskCreds.username + ':' + exports.deskCreds.userpw).toString('base64');
+
+
 	

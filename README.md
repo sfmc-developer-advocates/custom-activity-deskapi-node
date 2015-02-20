@@ -1,7 +1,7 @@
 # Journey Builder
-## Custom Activity - Desk.com API
+## Custom Activities - Desk.com API
 
-This nodejs app is a Journey Builder Application Extension containing one custom activity.  That custom activity, Create Case, creates an email case using Desk.com's API in response to a JB interaction trigger being fired.
+This nodejs app is a Journey Builder Application Extension containing two custom activities.  Create Case creates an email case using Desk.com's API in response to a JB interaction trigger being fired.  Update Case is to be placed after Create Case within an interaction and will update the subject and priority of the newly created case.
 
 **Abbreviated Instructions**(for those who have done this sorta thing before)
 
@@ -13,16 +13,23 @@ This nodejs app is a Journey Builder Application Extension containing one custom
 
 
 
-**What this custom activity demonstrates**
+**What the Create Case custom activity demonstrates**
 
 * The necessary pieces of a custom JB activity.
 * Multi-step activity configuration.
 * Use of inArguments for data-binding to the Contact Model.
+* Use of outArguments for passing data downstream from this activity to another activity further down in the interaction.
 * Default configuration values.
 * User override of default configuration values during configuration of activity.
 * Display of user-selected values during edit of activity.
 * Display of custom activity version (from package.json) for more transparent development iteration.
 * Use of the Desk.com API.
+
+**What the Update Case custom activity demonstrates**
+
+* Single-step activity configuration.
+* Use of inArguments for receiving data from another activity further upstream in the interaction.
+
 
 
 **NOTE:** You won't be able to run this locally. It is intended to be ran on a publicly available web server/cloud only.
@@ -97,6 +104,8 @@ When your interaction trigger is fired, the payload you send will be for either 
 	* Network tab/Response tab: a more detailed error is probably in there telling you why it failed.
 * Quick-check your code
 	* Before pushing to your web server, run "node app".  This will catch any syntax errors in the server-side (non-UI) code.
+* Make sure your URL endpoints in config.json point to valid endpoints.  A typo here can cost you days you'll never get back.
+* Run your config.json files through a JSON linter.  A misplaced comma will throw an error when JB tries to access the config files.
 
 
 
@@ -148,13 +157,22 @@ When your interaction trigger is fired, the payload you send will be for either 
 
 1. Select the Journey Builder Activity tab and click the plus sign (+) to begin creating an entry.
 	* Name: Create Case
-	* Key: johndoe-jb-example-activity-desk-create-case  (this key will be used in the code)
+	* Key: johndoe-jb-example-activity-desk-create-case  (this key will be used in the config.json file)
 	* Description: Create a case via Desk.com API
 	* Endpoint URL: https://&lt;your sub domain here&gt;.herokuapp.com/ixn/activities/create-case  (wherever you plan to host the app; can be edited later)
 	* Help URL/Description: Not required
 	* Category: Messaging
 	* Public Extension: This application and other installed applications
 2. Save.
+3. Click the plus sign (+) again.
+	* Name: Update Case
+	* Key: johndoe-jb-example-activity-desk-update-case  (this key will be used in the config.json file)
+	* Description: Update a case via Desk.com API
+	* Endpoint URL: https://&lt;your sub domain here&gt;.herokuapp.com/ixn/activities/update-case  (wherever you plan to host the app; can be edited later)
+	* Help URL/Description: Not required
+	* Category: Messaging
+	* Public Extension: This application and other installed applications
+4. Save.
 
 
 
@@ -183,7 +201,7 @@ When your interaction trigger is fired, the payload you send will be for either 
 
 
 #### Updating the code to reflect our new App Extensions
-1. Open /public/ixn/activities/create-case/config.json   
+1. Open /public/ixn/activities/create-case/config.json and /public/ixn/activities/update-case/config.json  
 
 2. Replace '&#95;&#95;activity-key&#95;&#95;' with the "Key" value of your App Extension Custom Activity (ie. johndoe-jb-example-activity-desk-create-case).  
 
@@ -191,9 +209,22 @@ When your interaction trigger is fired, the payload you send will be for either 
 
 4. Replace '&#95;&#95;your-de-name&#95;&#95;' with the name of the data extension you want to use for this interaction.
 
+5. In update-case config, replace '&#95;&#95;your-activity-customer-key&#95;&#95;' with the interaction-unique 'key' value for create-case activity.
+	You can get it by querying for details about your interaction:
+
+<pre>
+<code>
+headers: 
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+GET https://jbinteractions.exacttargetapps.com/fuelapi/interaction/v1/interactions/&lt;guid&gt;?extras=all&versionNumber=9
+</code>
+</pre>
+You can find your interaction's guid in the Network Tab (chrome) when you view interactions in Journey Builder. (https://jbinteractions.exacttargetapps.com/fuelapi/interaction/v1/interactions/)
+
 
 #### Updating the code to reflect our new Desk.com trial account
-1. Open /routes/activityCreate.js
+1. Open /routes/activityUtils.js
 
 2. Replace '&#95;&#95;subdomain&#95;&#95;', '&#95;&#95;username&#95;&#95;', and '&#95;&#95;password&#95;&#95;' with your desk.com subdomain, username and password values.
 	* make sure the desk.com user has either admin or API rights.
@@ -211,7 +242,7 @@ When your interaction trigger is fired, the payload you send will be for either 
 
 3. You should see the custom activity "Desk.com Create Case" in the left pane under "CUSTOM"
 
-#### Creating our Custom Activity
+#### Creating our Custom Interaction
 1. Drag the "Desk.com Create Case" activity from the list onto the Interaction Canvas at Minute 0.
 	* First change the duration of the Canvas to 'minutes'.
 
@@ -228,7 +259,11 @@ When your interaction trigger is fired, the payload you send will be for either 
 7. The Activity is configured.
 * If you hover again and click the edit icon, you should see the activities 'payload' in the Console tab of Developer Tools.  The payload should include the 'priority' change you just made.
 
-8. Save and activate your interaction.
+8. Add the "Update Case" activity to minute 1 of the interaction, then Configure, and Done. 
+
+9. Under the interaction name, set the interaction to "Multiple Entries" so your contact can go through it multiple times.
+
+10. Save and activate your interaction.
 
 #### Testing our Custom Interaction
 

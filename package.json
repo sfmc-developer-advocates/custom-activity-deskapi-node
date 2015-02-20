@@ -1,11 +1,11 @@
 {
   "name": "deskActivities",
-  "version": "0.0.1",
+  "version": "0.63.0",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
-  "author": "ExactTarget, Dev Advocate Team",
+  "author": "SalesForce Marketing Cloud, Dev Advocate Team",
   "contributors": [
     "Drew Simmons <drew.simmons@salesforce.com>"
   ],  
