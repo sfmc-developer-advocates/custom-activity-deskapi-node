@@ -44,7 +44,7 @@ exports.logData = function ( req ) {
 };
 
 
-exports._deskCreds = {
+exports.deskCreds = {
 	subdomain: '__subdomain__'
 	,username: '__username__'
 	,userpw: '__password__'
