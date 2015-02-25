@@ -209,7 +209,7 @@ When your interaction trigger is fired, the payload you send will be for either 
 
 4. Replace '&#95;&#95;your-de-name&#95;&#95;' with the name of the data extension you want to use for this interaction.
 
-5. In update-case config, replace '&#95;&#95;your-activity-customer-key&#95;&#95;' with the interaction-unique 'key' value for create-case activity.
+5. In update-case config, replace '&#95;&#95;your-activity-customer-key&#95;&#95;' with the interaction-unique 'key' value (ie. REST-1) for create-case activity.
 	You can get it by querying for details about your interaction:
 
 <pre>
